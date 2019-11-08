@@ -32,7 +32,7 @@
 \spacing single
 \use_hyperref false
 \papersize default
-\use_geometry false
+\use_geometry true
 \use_package amsmath 1
 \use_package amssymb 1
 \use_package cancel 1
@@ -57,6 +57,10 @@
 \shortcut idx
 \color #008000
 \end_index
+\leftmargin 2cm
+\topmargin 3cm
+\rightmargin 2cm
+\bottommargin 3cm
 \secnumdepth 3
 \tocdepth 3
 \paragraph_separation indent
@@ -269,7 +273,7 @@ status collapsed
 \begin_layout Plain Layout
 \begin_inset Graphics
 	filename C:/Users/Manuel Mollon/Dropbox/4 - CONTROL/CONTROL_TP3/mediciones/Screenshot 2019-11-04 14.18.40.png
-	scale 50
+	scale 40
 
 \end_inset
 
@@ -516,17 +520,18 @@ sideways false
 status open
 
 \begin_layout Plain Layout
+\align center
 \begin_inset Float figure
 placement H
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \align center
 \begin_inset Graphics
 	filename C:/Users/Manuel Mollon/Dropbox/4 - CONTROL/CONTROL_TP3/mediciones/scope_2.png
-	scale 70
+	scale 30
 
 \end_inset
 
@@ -552,17 +557,21 @@ Primer medición
 \end_inset
 
 
+\end_layout
+
+\begin_layout Plain Layout
+\align center
 \begin_inset Float figure
 placement H
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \align center
 \begin_inset Graphics
 	filename C:/Users/Manuel Mollon/Dropbox/4 - CONTROL/CONTROL_TP3/mediciones/scope_1.png
-	scale 70
+	scale 30
 
 \end_inset
 

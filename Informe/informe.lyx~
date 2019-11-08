@@ -32,7 +32,7 @@
 \spacing single
 \use_hyperref false
 \papersize default
-\use_geometry false
+\use_geometry true
 \use_package amsmath 1
 \use_package amssymb 1
 \use_package cancel 1
@@ -57,6 +57,10 @@
 \shortcut idx
 \color #008000
 \end_index
+\leftmargin 2cm
+\topmargin 3cm
+\rightmargin 2cm
+\bottommargin 3cm
 \secnumdepth 3
 \tocdepth 3
 \paragraph_separation indent
@@ -269,7 +273,7 @@ status collapsed
 \begin_layout Plain Layout
 \begin_inset Graphics
 	filename C:/Users/Manuel Mollon/Dropbox/4 - CONTROL/CONTROL_TP3/mediciones/Screenshot 2019-11-04 14.18.40.png
-	scale 50
+	scale 40
 
 \end_inset
 
@@ -474,11 +478,6 @@ Para poder utilizar el control por Arduino propuesto, se requirió realizar
  Finalmente, mediante un jumper, se puede elegir el potenciómetro, o elegir
  insertar una señal analógica desde un generador, de manera de poder medir
  la respuesta al escalón, a una rampa, etc.
- La placa realizada se encuentra a continuación:
-\end_layout
-
-\begin_layout Standard
-FOTO DE PLACA
 \end_layout
 
 \begin_layout Section
@@ -505,6 +504,203 @@ FOTO DE CODIGO
 
 \begin_layout Section
 Mediciones
+\end_layout
+
+\begin_layout Standard
+Las primeras mediciones tomadas fueron para corroborar que la función transferen
+cia calculada es la correcta.
+ A continuación se midió la respuesta a lazo abierto:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename C:/Users/Manuel Mollon/Dropbox/4 - CONTROL/CONTROL_TP3/mediciones/scope_2.png
+	scale 30
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Primer medición
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename C:/Users/Manuel Mollon/Dropbox/4 - CONTROL/CONTROL_TP3/mediciones/scope_1.png
+	scale 30
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Primer medición
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Mediciones a lazo abierto
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+En la primer medición podemos ver en amarillo la salida del sistema midiendo
+ la velocidad angular del tacómetro.
+ Esta se puede ver que tiene una amplitud de 
+\begin_inset Formula $7V$
+\end_inset
+
+.
+ Mientras que el escalón de entrada tiene 
+\begin_inset Formula $4.5V$
+\end_inset
+
+.
+ En consecuencia, la ganancia es de 
+\begin_inset Formula $k=\frac{7V}{4.5V}=1.56$
+\end_inset
+
+ veces.
+ Luego, se midió la constante de tiempo 
+\begin_inset Formula $\tau$
+\end_inset
+
+ como el tiempo que se tarda en llegar al 
+\begin_inset Formula $63.2\%$
+\end_inset
+
+ del valor final.
+ Es decir a 
+\begin_inset Formula $7V\cdotp0.632\approx4.4V$
+\end_inset
+
+.
+ Esto se pude ver en la segunda medición.
+ observando que 
+\begin_inset Formula $\tau=36.5ms$
+\end_inset
+
+.
+ Por lo que se obtiene la forma final:
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Formula $T(s)=k\cdotp\frac{(\frac{1}{\tau})}{s+\frac{1}{\tau}}=1.56\cdotp\frac{\frac{1}{36.5\cdotp10^{-3}}}{s+\frac{1}{36.5\cdotp10^{-3}}}=\frac{42.74}{s+27.62}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Para llegar finalmente a la 
+\begin_inset Formula $H(s)$
+\end_inset
+
+ calculada teóricamente se debe tener en cuenta el factor de escalamiento
+ del tacómetro para llegar a la verdadera transferencia, por lo que se obtiene:
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Formula $H(s)=\frac{T(s)}{K_{tac}}=\frac{42.74}{s+27.62}\cdotp\frac{1}{0.0143}=\frac{3052.84}{s+27.62}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Donde se puede observar que es muy similar a la calculada teóricamente:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\begin{cases}
+H_{teorica}(s)=\frac{3052.84}{s+27.62}\\
+H_{medida}(s)=\frac{3400}{s+27}
+\end{cases}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Los errores pueden ser en parte por el echo de que la entrada no es exactamente
+ una cuadrada, por lo que el tiempo calculados tiene un error inducido.
 \end_layout
 
 \begin_layout Section
