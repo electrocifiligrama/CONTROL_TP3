@@ -98,6 +98,19 @@ filename "caratulaCONTROL-TP3.lyx"
 Introducción
 \end_layout
 
+\begin_layout Standard
+El objetivo de este proyecto es utilizar lo aprendido sobre realimentación
+ de estados para poder controlar la posición angular de una varilla adjunta
+ a un motor.
+ Con el uso de un potenciómetro y un tacómetro como variables de estado,
+ se pudo re-alimentar el circuito (con el uso de Arduino) de tal manera
+ que se pueda controlar la posición de la varilla con un potenciómetro.
+ Para ello se debió calcular la función transferencia de la planta, calcular
+ los coeficientes de realimentación, realizar la simulación correspondiente
+ y llevar acabo físicamente el proyecto y midiendo los parámetros para comparar
+ con la simulación y la teoría.
+\end_layout
+
 \begin_layout Section
 Marco Teórico
 \end_layout
@@ -106,8 +119,128 @@ Marco Teórico
 Calculo de la función transferencia
 \end_layout
 
-\begin_layout Section
-Simulación
+\begin_layout Standard
+Partiendo de la configuración vista anteriormente, y el circuito equivalente
+ de un motor también presentado en el marco teórico, podemos escribir las
+ siguientes ecuaciones:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\text{\begin{cases}
+ e_{a}(s)=R_{a}\cdotp I_{a}+L_{a}\cdotp s\cdotp I_{a}+e_{b}  &  (1)\\
+ e_{b}=K_{b}\cdotp\omega_{m}  &  (2)\\
+ T_{o}(s)=J_{o}\cdotp s\cdotp\omega_{m}+B_{o}\cdotp\omega_{m}  &  (3)\\
+ T_{o}(s)=K_{o}\cdotp I_{a}  &  (4) 
+\end{cases}}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Despreciando 
+\begin_inset Formula $L_{a}$
+\end_inset
+
+ ya que esta en el orden de los micro y la frecuencia es muy baja 
+\begin_inset Formula $(f=50Hz)$
+\end_inset
+
+, y despejando 
+\begin_inset Formula $I_{a}$
+\end_inset
+
+ de (1) se obtiene:
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Formula $I_{a}=\frac{e_{a}(s)-e_{b}}{R_{a}}=\frac{e_{a}(s)-K_{b}\cdotp\omega_{m}}{R_{a}}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Igualando (3) y (4) se obtiene:
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Formula $J_{o}\cdotp s\cdotp\omega_{m}+B_{o}\cdotp\omega_{m}=K_{o}\cdotp I_{a}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Donde se reemplaza la expresión obtenida de 
+\begin_inset Formula $I_{a}$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Formula $J_{o}\cdotp s\cdotp\omega_{m}+B_{o}\cdotp\omega_{m}=K_{o}\cdotp\frac{e_{a}(s)-K_{b}\cdotp\omega_{m}}{R_{a}}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Despejando 
+\begin_inset Formula $\frac{\omega_{m}}{e_{a}}$
+\end_inset
+
+ obtenemos:
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Formula $H(s)=\frac{\omega_{m}}{e_{a}}=\frac{(\frac{K_{o}}{R_{a}\cdotp J_{o}})}{s+\frac{B_{o}}{J_{o}}+\frac{K_{o}\cdotp K_{b}}{R_{a}\cdotp J_{o}}}$
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Standard
+Donde los parámetros pueden ser calculados de la siguiente manera teniendo
+ en cuenta los engranajes (
+\begin_inset Formula $K_{g}=70$
+\end_inset
+
+):
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\begin{cases}
+K_{o}=K_{b}\cdotp K_{g}^{2}\\
+J_{o}=Jg+K_{g}^{2}\cdotp(J_{m}+J_{tach})\\
+B_{o}=Beq_{h}+Beq_{l}
+\end{cases}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Reemplazando los valores dados por la hoja de datos, se llega al siguiente
+ resultado numérico:
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Formula $H(s)\approx\frac{3400}{s+27}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Esta función transferencia fue corroborada con mediciones en la sección
+ correspondiente.
 \end_layout
 
 \begin_layout Section
@@ -115,11 +248,259 @@ Realimentación de variables de estado
 \end_layout
 
 \begin_layout Section
+Simulación
+\end_layout
+
+\begin_layout Standard
+Luego de calcular los coeficientes, se prosiguió a realizar la simulación
+ correspondiente.
+ Para ello se uso Simulink.
+ El diagrama realizado es el siguiente:
+\end_layout
+
+\begin_layout Standard
+\align left
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename C:/Users/Manuel Mollon/Dropbox/4 - CONTROL/CONTROL_TP3/mediciones/Screenshot 2019-11-04 14.18.40.png
+	scale 50
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Diagrama de Simulink
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Donde se puede ver que la transferencia original calculada 
+\begin_inset Formula $H(s)$
+\end_inset
+
+ se encuentra presente.
+ De esta salida hay dos ramas, una es seguida de un integrador, que corresponde
+ a pasar de la velocidad angula del motor a la velocidad angular del motor
+ a la posición angular, ya que se tiene:
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Formula $\omega_{m}(t)=\frac{d\theta(t)}{dt}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Y transformando se llega a:
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Formula $\omega_{m}(s)=s\cdotp\theta(s)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Formula $\frac{\omega_{m}(s)}{s}=\theta(s)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+La otra rama va al tacómetro, donde la velocidad angular es reflejada en
+ tensión, siendo una relación lineal entre estas dos:
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Formula $\omega_{m}(t)=K_{tach}\cdotp V_{\omega}(t)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Donde se tiene 
+\begin_inset Formula $K_{tach}=\frac{1.5V}{1000RPM}=\frac{1.5}{1000}\cdotp\frac{V}{RPM}\cdotp\frac{60}{2\pi}\cdotp\frac{RPM}{(\frac{rad}{seg})}=0.0143\frac{V}{(\frac{rad}{seg})}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Luego del integrador, para obtener la función transferencia a la salida
+ de los engranajes, se multiplica la salida del integrador por 
+\begin_inset Formula $K_{g}=\frac{1}{15\cdotp4}=\frac{1}{70}$
+\end_inset
+
+.
+ De esta salida también se encuentra el potenciómetro que traduce la posición
+ angular en tensión, donde se tiene 
+\begin_inset Formula $K_{pot}=35.2\frac{\textdegree}{V}=35.2\textdegree\cdotp\frac{\pi}{180\textdegree}\cdotp\frac{rad}{V}=0.614\frac{rad}{V}$
+\end_inset
+
+.
+ En el control de Arduino que se explica en la siguiente sección, se incluyo
+ un limitador de tensión por lo que se agrego este bloque en la simulación.
+ La simulación también incluye la constante que corrige el error permanente.
+ Volcando los valores obtenidos en la sección anterior se corrió la simulación,
+ obteniendo el siguiente resultados:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename C:/Users/Manuel Mollon/Dropbox/4 - CONTROL/CONTROL_TP3/mediciones/Screenshot 2019-11-04 15.04.06.png
+	scale 40
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Simulación
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Donde la función amarilla es el escalón a la entrada, la función azul la
+ entrada de la función transferencia (
+\begin_inset Formula $E_{a}$
+\end_inset
+
+) y la función roja la salida del sistema.
+\end_layout
+
+\begin_layout Standard
+Se puede apreciar que la respuesta es críticamente amortiguada como se cálculo
+ y tiene error permanente nulo.
+ Ademas, se calculo la constante de tiempo, siendo esta de 
+\begin_inset Formula $\tau=346ms$
+\end_inset
+
+.
+ De manera que el tiempo de crecimiento es de 
+\begin_inset Formula $T_{r}=2.2\cdotp\tau=761.2ms$
+\end_inset
+
+.
+ También se puede apreciar en la simulación la limitación por voltaje en
+ la entrada del motor, de manera que este no se rompa a causa de un sobre-pico
+ alto por parte del control propuesto.
+\end_layout
+
+\begin_layout Section
 Placa Driver
+\end_layout
+
+\begin_layout Standard
+Para poder utilizar el control por Arduino propuesto, se requirió realizar
+ una placa intermedia que cumple varias funciones.
+ Una de estas funciones es alimentar las tres señales de control al Arduino.
+ Una de ellas (A1) es la del potenciómetro del Quanser que mide posición
+ angular, siendo este potenciómetro alimentado con seis volts.
+ La segunda señal (A2) corresponde a un potenciómetro en la placa, el cual
+ se usa para determinar en que posición se quiere el motor.
+ La ultima señal (A3) es la proveniente del tacómetro, pero a esta ultima
+ señal hace falta adaptar el rango de tensiones posibles, para que esta
+ pueda ser alimentada al Arduino con la señal.
+ Esto se logro con un sumador, lo que lleva la tensión de 
+\begin_inset Formula $0V-10V$
+\end_inset
+
+ a 
+\begin_inset Formula $0V-2.5V$
+\end_inset
+
+.
+ Otra función de la placa incluye la comunicación entre Arduino y el motor
+ a través de un puente H.
+ Este mismo con el uso de una librería de Arduino, se comunican con el motor
+ de manera eficiente.
+ Finalmente, mediante un jumper, se puede elegir el potenciómetro, o elegir
+ insertar una señal analógica desde un generador, de manera de poder medir
+ la respuesta al escalón, a una rampa, etc.
+ La placa realizada se encuentra a continuación:
+\end_layout
+
+\begin_layout Standard
+FOTO DE PLACA
 \end_layout
 
 \begin_layout Section
 Control por Arduino
+\end_layout
+
+\begin_layout Standard
+Como se mencionó anteriormente, se escribió un código con ayuda de una librería
+ para utilizar el puente H en modo PWM y así alimentar al motor la tensión
+ necesaria para el control.
+ En el código se introdujeron las constantes de ganancia para las variables
+ de estado y así efectuar la correcta realimentación de estados.
+ La desventaja de este método es que al utilizar la librería, se setea la
+ tensión mediante una función la cual no recibe como parámetro una tensión,
+ sino una velocidad.
+ En consecuencia, se debió ajustar las constantes de las variables de estado
+ de manera practica/experimental.
+ A continuación se encuentra el código escrito para realizar el control:
+\end_layout
+
+\begin_layout Standard
+FOTO DE CODIGO
 \end_layout
 
 \begin_layout Section
@@ -127,7 +508,7 @@ Mediciones
 \end_layout
 
 \begin_layout Section
-Conclusiones
+Comparación y Conclusiones
 \end_layout
 
 \end_body
