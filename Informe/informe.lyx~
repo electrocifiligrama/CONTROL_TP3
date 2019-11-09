@@ -5,6 +5,9 @@
 \save_transient_properties true
 \origin unavailable
 \textclass article
+\begin_preamble
+\usepackage{matlab-prettifier}
+\end_preamble
 \use_default_options true
 \maintain_unincluded_children false
 \language spanish
@@ -72,6 +75,7 @@
 \papercolumns 1
 \papersides 1
 \paperpagestyle default
+\listings_params "style={Matlab-editor}"
 \tracking_changes false
 \output_changes false
 \html_math_output 0
@@ -119,8 +123,443 @@ El objetivo de este proyecto es utilizar lo aprendido sobre realimentación
 Marco Teórico
 \end_layout
 
+\begin_layout Subsection
+
+\lang english
+Representación en el espacio de estados
+\end_layout
+
+\begin_layout Standard
+
+\lang english
+Dado un sistema descripto por una función transferencia 
+\begin_inset Formula $\ensuremath{H(s)=\frac{N(s)}{D(s)}}$
+\end_inset
+
+ cualquiera, la misma puede ser transformada a un sistema matricial descripto
+ por el siguiente sistema de ecuaciones:
+\end_layout
+
+\begin_layout Standard
+\align center
+
+\lang english
+\begin_inset Formula $X'=A\cdot X+B\cdot U(1)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\align center
+
+\lang english
+\begin_inset Formula $Y=C\cdot X+D\cdot U(2)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\lang english
+Donde dicho sistema de ecuaciones es denominado el espacio de estados del
+ sistema 
+\begin_inset Formula $H$
+\end_inset
+
+.
+ Aquellas ecuaciones descriptas por (1) son llamadas entonces "ecuaciones
+ de estados" y aquellas descriptas por (2) llevan el nombre de "ecuaciones
+ de salida" del sistema.
+ Existen varias representaciones alternativas en el espacio de estados,
+ pero los métodos de control que se desarrollarán en este trabajo se basan
+ en la representación canónica de variable de fase (FCVF).
+\end_layout
+
+\begin_layout Standard
+
+\lang english
+De la representación en el espacio de estados del sistema se deriva el siguiente
+ diagrama:
+\end_layout
+
+\begin_layout Standard
+
+\lang english
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+
+\lang english
+\begin_inset Graphics
+	filename Imagenes/transferencia.png
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\lang english
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+
+\lang english
+Representación en el espacio de estados
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\lang english
+Donde 
+\begin_inset Formula $H(s)=C\cdot(s\cdot I-A)^{-1}\cdot B+D$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+
+\lang english
+Pole placement
+\end_layout
+
+\begin_layout Standard
+
+\lang english
+Teniendo en cuenta que la función transferencia 
+\begin_inset Formula $H(s)$
+\end_inset
+
+ del sistema 
+\begin_inset Formula $H$
+\end_inset
+
+ que se pretende controlar tiene polos definidos por el sistema físico real
+ a utilizar, se intenta luego modificar el sistema mediante realimentaciones
+ para obtener una nueva transferencia 
+\begin_inset Formula $H_{pp}(s)$
+\end_inset
+
+ cuyos polos estén ubicados en el lugar del plano complejo que se desee.
+\end_layout
+
+\begin_layout Standard
+
+\lang english
+El método a utilizar es el de pole placement, que consiste en la implementación
+ del siguiente diagrama:
+\end_layout
+
+\begin_layout Standard
+
+\lang english
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+
+\lang english
+\begin_inset Graphics
+	filename Imagenes/pole_placement.png
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\lang english
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+
+\lang english
+Pole Placement, matriz K a determinar
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\lang english
+Para que este método sea realizable, el sistema debe ser controlable, es
+ decir que su matriz de controlabilidad tenga determinante no nulo.
+ Asumimos que esto se cumple para el sistema en cuestión.
+\end_layout
+
+\begin_layout Standard
+
+\lang english
+El nuevo sistema entonces será regido por las siguientes ecuaciones:
+\end_layout
+
+\begin_layout Standard
+\align center
+
+\lang english
+\begin_inset Formula $X'=(A-B\cdot K)\cdot X+B\cdot r(1)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\align center
+
+\lang english
+\begin_inset Formula $Y=(C-D\cdot K)\cdot X+D\cdot r(2)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\lang english
+Llamando 
+\begin_inset Formula $A_{a}=A-B\cdot K$
+\end_inset
+
+, 
+\begin_inset Formula $B_{a}=C-D\cdot K$
+\end_inset
+
+, el sistema se puede expresar como:
+\end_layout
+
+\begin_layout Standard
+\align center
+
+\lang english
+\begin_inset Formula $X'=A_{a}\cdot X+B\cdot r(1)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\align center
+
+\lang english
+\begin_inset Formula $Y=B_{a}\cdot X+D\cdot r(2)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\lang english
+De aquí, los polos de 
+\begin_inset Formula $H_{pp}(s)$
+\end_inset
+
+ estarán dados por:
+\end_layout
+
+\begin_layout Standard
+\align center
+
+\lang english
+\begin_inset Formula $|s\cdot I-A+B\cdot K|=0$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\lang english
+De las ecuación resultante, se podrán fijar los polos en el lugar que se
+ requiera otorgándole a la matriz K los valores apropiados.
+\end_layout
+
+\begin_layout Standard
+
+\lang english
+Este método permite modificar tanto la estabilidad de un sistema, como el
+ orden del mismo (se podrá disminuir el orden aumentando la distancia de
+ determinados polos al menos una década de los demás polos dominantes).
+ En caso de que 
+\begin_inset Formula $H_{pp}(s)$
+\end_inset
+
+ describa un sistema de segundo o primer orden, entonces se podrá fijar
+ un nuevo tiempo de establecimiento y overshoot de acuerdo con lo requerido
+ por el sistema de control a implementar.
+ De esta forma, implementando analógica o digitalmente la realimentacion
+ 
+\begin_inset Formula $K$
+\end_inset
+
+, se podrá controlar al nuevo sistema con los parámetros especificados
+\end_layout
+
+\begin_layout Subsection
+
+\lang english
+Corrección del error permamente
+\end_layout
+
+\begin_layout Standard
+
+\lang english
+Se procede a calcular el error permanente de un sistema con transferencia
+\begin_inset Formula $H_{pp}(s)$
+\end_inset
+
+ frente a un escalón como entrada.
+\end_layout
+
+\begin_layout Standard
+\align center
+
+\lang english
+\begin_inset Formula $e_{ss}=lim_{s->0}1-H_{pp}(s)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\align center
+
+\lang english
+\begin_inset Formula $e_{ss}=lim_{s->0}1-C\cdot(s\cdot I-A_{a})^{-1}\cdot B_{a}+D$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\align center
+
+\lang english
+\begin_inset Formula $e_{ss}=lim_{s->0}1-(C-D\cdot K)\cdot(s\cdot I-A+B\cdot K)^{-1}\cdot B+D$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\lang english
+Este error resulta no necesariamente nulo para cualquier transferencia 
+\begin_inset Formula $H_{pp}(s)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+
+\lang english
+Se busca ahora lograr un error permanente nulo en la salida.
+ Para esto se utiliza el siguiente diagrama:
+\end_layout
+
+\begin_layout Standard
+
+\lang english
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+
+\lang english
+\begin_inset Graphics
+	filename Imagenes/constante_error.png
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\lang english
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+
+\lang english
+Correción del error permanente
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\lang english
+El error permanente de dicho sistema sigue la fórmula:
+\end_layout
+
+\begin_layout Standard
+\align center
+
+\lang english
+\begin_inset Formula $e_{ss}=lim_{s->0}1-K_{n+1}\cdot H_{pp}(s)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\lang english
+Donde se busca un 
+\begin_inset Formula $K_{n+1}$
+\end_inset
+
+ específico para el cual el error permanente a la salida sea nulo.
+\end_layout
+
 \begin_layout Section
-Calculo de la función transferencia
+Cálculo de la función transferencia
 \end_layout
 
 \begin_layout Standard
@@ -251,6 +690,317 @@ Esta función transferencia fue corroborada con mediciones en la sección
 Realimentación de variables de estado
 \end_layout
 
+\begin_layout Subsection
+Representación canónica de variables de fase
+\end_layout
+
+\begin_layout Standard
+Se cuenta con la función transferencia calculada en la sección anterior
+ 
+\begin_inset Formula $H(s)\approx\frac{3400}{s+27}$
+\end_inset
+
+ para el motor sin controlar, que relaciona la velocidad angular del motor
+ con la tensión aplicada a la entrada del mismo.
+ Se busca luego obtener a partir del sistema conformado por el motor 
+\begin_inset Formula $H$
+\end_inset
+
+, un nuevo sistema 
+\begin_inset Formula $H_{pp}$
+\end_inset
+
+ que permita controlar la posición angular del motor en función de la tensión
+ de entrada de 
+\begin_inset Formula $H_{pp}$
+\end_inset
+
+ con una velocidad de respuesta elevada.
+\end_layout
+
+\begin_layout Standard
+Para lograr esto, se procede a representar en el espacio de estados al sistema
+ H, como se mencióno en la sección del marco teórico, siguiendo el método
+ de la representación canónica de variables de fase FCVF.
+ Representando al sistema 
+\begin_inset Formula $H$
+\end_inset
+
+ con una nueva transferencia 
+\begin_inset Formula $H'(s)$
+\end_inset
+
+que exprese la posición angular en función de la tensión de entrada, obtenemos
+ 
+\begin_inset Formula $H'(s)=\frac{\theta(s)}{e_{a}(s)}=\frac{3400}{s\cdot(s+27)}$
+\end_inset
+
+.
+ Llamando 
+\begin_inset Formula $k_{0}=3400$
+\end_inset
+
+, 
+\begin_inset Formula $p_{0}=27$
+\end_inset
+
+, se deriva la siguiente ecuación:
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Formula $e_{a}\cdot k_{0}=\theta\cdot s\cdot(s+p_{0})$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Formula $e_{a}\cdot k_{0}=\theta''+\theta'\cdot p_{0}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Si denominamos 
+\begin_inset Formula $X_{1}$
+\end_inset
+
+ y 
+\begin_inset Formula $X_{2}$
+\end_inset
+
+ a las dos variables de estado del sistema de segundo orden 
+\begin_inset Formula $H$
+\end_inset
+
+ tal que 
+\begin_inset Formula $\theta=X_{1}$
+\end_inset
+
+ y 
+\begin_inset Formula $X_{1}'=X_{2}$
+\end_inset
+
+, obtenemos una nueva expresión de la ecuación anterior como:
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Formula $X_{2}'=e_{a}\cdot k_{0}-X_{2}\cdot p_{0}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Reemplazando luego por los valores de 
+\begin_inset Formula $k_{0}$
+\end_inset
+
+ y 
+\begin_inset Formula $p_{0}$
+\end_inset
+
+, obtenemos entonces:
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Formula $X_{2}'=3400\cdot e_{a}-27\cdot X_{2}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Y de aquí que se deriva la ecuación matricial de estados del sistema:
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Formula $\left[\begin{matrix}X_{1}'\\
+X_{2}'
+\end{matrix}\right]=\left[\begin{matrix}0 & 1\\
+0 & -27
+\end{matrix}\right]\cdot\left[\begin{matrix}X_{1}\\
+X_{2}
+\end{matrix}\right]+e_{a}\cdot\left[\begin{matrix}0\\
+3400
+\end{matrix}\right]$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Quedan definidas entonces las matrices que siguen la notación definida en
+ el marco teórico, 
+\begin_inset Formula $A\text{=\left[\begin{matrix}0  &  1\\
+ 0  &  -27 
+\end{matrix}\right]}$
+\end_inset
+
+, 
+\begin_inset Formula $B\text{=}\left[\begin{matrix}0\\
+3400
+\end{matrix}\right]$
+\end_inset
+
+,
+\end_layout
+
+\begin_layout Standard
+Estas matrices serán luego utilizadas para la realimentación por pole Placement,
+ siguiendo también lo fijado en el marco teórico.
+\end_layout
+
+\begin_layout Subsection
+Aplicación del método de Pole Placement sobre el sistema
+\end_layout
+
+\begin_layout Standard
+Siguiendo al marco teórico y utilizando las matrices recién obtenidas, se
+ corre el siguiente código en Matlab:
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset include
+LatexCommand lstinputlisting
+filename "C:/ITBA/9 Cuatrimestre/Sistemas de Control/Trabajos Prácticos/CONTROL_TP3/Calculos/calculo polos.m"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+El cual devuelve los polos del sistema 
+\begin_inset Formula $H_{pp}$
+\end_inset
+
+ en función de las constantes de realimentación 
+\begin_inset Formula $k_{1}$
+\end_inset
+
+ y 
+\begin_inset Formula $k_{2}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Dichos polos resultan ser:
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Formula $p_{a}=-1700\,\mathrm{k2}-\frac{\sqrt{11560000\cdot\mathrm{k2}^{2}+183600\cdot\mathrm{k2}-13600\cdot\mathrm{k1}+729}}{2}-\frac{27}{2}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Formula $p_{b}=-1700\,\mathrm{k2}+\frac{\sqrt{11560000\cdot\mathrm{k2}^{2}+183600\cdot\mathrm{k2}-13600\cdot\mathrm{k1}+729}}{2}-\frac{27}{2}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Fijando entonces 
+\begin_inset Formula $k_{1}$
+\end_inset
+
+ tal que el discriminante sea nulo, se obtendrá un sistema críticamente
+ amortiguado.
+ El valor de 
+\begin_inset Formula $k_{1}$
+\end_inset
+
+ para el que esto sucede es:
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Formula $k_{1}=\frac{11560000\cdot\mathrm{k2}^{2}+183600\cdot\mathrm{k2}+729}{13600}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Formula $k_{1}=850\cdot\mathrm{k2}^{2}+13.5\cdot\mathrm{k2}+\frac{729}{13600}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+De aquí, fijando 
+\begin_inset Formula $k_{2}\text{=}0.01$
+\end_inset
+
+, se obtiene 
+\begin_inset Formula $k_{1}=0.2736$
+\end_inset
+
+ y 
+\begin_inset Formula $p_{a}=p_{b}=-25.5$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsection
+Cálculo del error permanente
+\end_layout
+
+\begin_layout Standard
+Siguiendo al marco teórico, utilizamos el siguiente código para calcular
+ el error permanente con la nueva constante agregada 
+\begin_inset Formula $k_{ess}\text{=}k_{3}$
+\end_inset
+
+ de la sección marco teórico.
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset include
+LatexCommand lstinputlisting
+filename "C:/ITBA/9 Cuatrimestre/Sistemas de Control/Trabajos Prácticos/CONTROL_TP3/Calculos/calculo_error.m"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Habiendo obtenido de aquí la expresión del error permamente:
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Formula $e_{ss}=1-\frac{1360\cdot kess}{7\cdot\left(4\cdot s^{2}+244\cdot s+3721\right)}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Nos queda entonces definir 
+\begin_inset Formula $k_{ess}=\frac{7\cdot3721}{1360}\approx19.15$
+\end_inset
+
+ y tomar el límite para que el error permanente sea nulo.
+\end_layout
+
 \begin_layout Section
 Simulación
 \end_layout
@@ -268,11 +1018,12 @@ Luego de calcular los coeficientes, se prosiguió a realizar la simulación
 placement H
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
+\align center
 \begin_inset Graphics
-	filename C:/Users/Manuel Mollon/Dropbox/4 - CONTROL/CONTROL_TP3/mediciones/Screenshot 2019-11-04 14.18.40.png
+	filename C:/ITBA/9 Cuatrimestre/Sistemas de Control/Trabajos Prácticos/CONTROL_TP3/mediciones/Screenshot 2019-11-04 14.18.40.png
 	scale 40
 
 \end_inset
@@ -386,12 +1137,12 @@ Luego del integrador, para obtener la función transferencia a la salida
 placement H
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \align center
 \begin_inset Graphics
-	filename C:/Users/Manuel Mollon/Dropbox/4 - CONTROL/CONTROL_TP3/mediciones/Screenshot 2019-11-04 15.04.06.png
+	filename C:/ITBA/9 Cuatrimestre/Sistemas de Control/Trabajos Prácticos/CONTROL_TP3/mediciones/Screenshot 2019-11-04 15.04.06.png
 	scale 40
 
 \end_inset
@@ -495,15 +1246,15 @@ Como se mencionó anteriormente, se escribió un código con ayuda de una librer
  sino una velocidad.
  En consecuencia, se debió ajustar las constantes de las variables de estado
  de manera practica/experimental.
- A continuación se encuentra el código escrito para realizar el control:
-\end_layout
-
-\begin_layout Standard
-FOTO DE CODIGO
+ Adjunto se encuentra el código escrito para realizar el control.
 \end_layout
 
 \begin_layout Section
 Mediciones
+\end_layout
+
+\begin_layout Subsection
+Función de transferencia
 \end_layout
 
 \begin_layout Standard
@@ -520,16 +1271,17 @@ sideways false
 status open
 
 \begin_layout Plain Layout
+\align center
 \begin_inset Float figure
 placement H
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \align center
 \begin_inset Graphics
-	filename C:/Users/Manuel Mollon/Dropbox/4 - CONTROL/CONTROL_TP3/mediciones/scope_2.png
+	filename C:/ITBA/9 Cuatrimestre/Sistemas de Control/Trabajos Prácticos/CONTROL_TP3/mediciones/scope_2.png
 	scale 30
 
 \end_inset
@@ -559,16 +1311,17 @@ Primer medición
 \end_layout
 
 \begin_layout Plain Layout
+\align center
 \begin_inset Float figure
 placement H
 wide false
 sideways false
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \align center
 \begin_inset Graphics
-	filename C:/Users/Manuel Mollon/Dropbox/4 - CONTROL/CONTROL_TP3/mediciones/scope_1.png
+	filename C:/ITBA/9 Cuatrimestre/Sistemas de Control/Trabajos Prácticos/CONTROL_TP3/mediciones/scope_1.png
 	scale 30
 
 \end_inset
@@ -699,8 +1452,185 @@ H_{medida}(s)=\frac{3400}{s+27}
 \end_layout
 
 \begin_layout Standard
-Los errores pueden ser en parte por el echo de que la entrada no es exactamente
+Los errores pueden ser en parte por el hecho de que la entrada no es exactamente
  una cuadrada, por lo que el tiempo calculados tiene un error inducido.
+\end_layout
+
+\begin_layout Subsection
+Respuesta a distintas entradas
+\end_layout
+
+\begin_layout Standard
+Se procede a medir la respuesta del sistema a distintas entradas, teniendo
+ en cuenta que la medición es de la posición angular del motor (variable
+ a controlar) en este caso y no de la velocidad final como lo fue en la
+ subsección anterior.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename C:/ITBA/9 Cuatrimestre/Sistemas de Control/Trabajos Prácticos/CONTROL_TP3/mediciones/NUEVAS/cuad.png
+	scale 30
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Respuesta al escalón
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename C:/ITBA/9 Cuatrimestre/Sistemas de Control/Trabajos Prácticos/CONTROL_TP3/mediciones/NUEVAS/tri.png
+	scale 30
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Respuesta a una triangular
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename C:/ITBA/9 Cuatrimestre/Sistemas de Control/Trabajos Prácticos/CONTROL_TP3/mediciones/NUEVAS/s.png
+	scale 30
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Respuesta a una senoidal
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Se observa el comportamiento críticamente amortiguado que se requería y
+ un error permanente prácticamente nulo en la respuesta del motor al escalón.
+\end_layout
+
+\begin_layout Standard
+Se muestra a continuación la respuesta del nuevo sistema al control mediante
+ el uso del potenciómetro (entrada aleatoria).
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement H
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename C:/ITBA/9 Cuatrimestre/Sistemas de Control/Trabajos Prácticos/CONTROL_TP3/mediciones/NUEVAS/pote.png
+	scale 30
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Control mediante el uso del potenciómetro
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Section
